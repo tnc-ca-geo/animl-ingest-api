@@ -18,6 +18,7 @@
         }
     },
     "include": [
-        "index.ts"
+        "index.ts",
+        "routes/*.ts"
     ]
 }
