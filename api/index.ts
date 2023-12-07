@@ -17,16 +17,7 @@ const schema = new Schema(express.Router(), { openapi: false });
 
 app.use('/api', schema.router);
 
-await schema.api();
-
-app.post('/login', async (req: Request, res: Response) => {
-
-});
-
-app.post('/images', async (req: Request, res: Response) => {
-    console.error(req.body)
-
-});
+await schema.load(new URL('./routes/', import.meta.url), {}, { silent: true });
 
 const handler = serverless(app);
 

@@ -41,3 +41,5 @@ functions:
       name: ingest-api
     name: IngestAPI-${opt:stage, self:provider.stage, 'dev'}
     timeout: 15
+    events:
+      - httpApi: '*'

@@ -47,7 +47,7 @@ export default async function router(schema: any) {
                 image: { type: "string" },
                 image_group: { type: "string" },
                 metadata: {
-                    type: 'properties',
+                    type: 'object',
                     additionalProperties: false,
                     required: ['file_name', 'date_time_taken'],
                     properties: {
