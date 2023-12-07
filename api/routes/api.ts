@@ -27,6 +27,10 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
+            return res.json({
+                token: '123',
+                message: 'message-123'
+            });
         } catch (err) {
             return Err.respond(err, res);
         }
@@ -62,12 +66,14 @@ export default async function router(schema: any) {
             additionalProperties: false,
             required: ['token', 'message'],
             properties: {
-                token: { type: 'string' },
                 message: { type: 'string' }
             }
         }
     }, async (req: Request, res: Response) => {
         try {
+            return res.json({
+                message: 'message-123'
+            })
         } catch (err) {
             return Err.respond(err, res);
         }
