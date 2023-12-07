@@ -36,8 +36,9 @@ The name of the profile must be "animl", because that's what
 
 ```sh
 git clone https://github.com/tnc-ca-geo/animl-ingest-api.git
-cd animl-ingest
+cd animl-ingest-api/api
 npm install
+cd ..
 ```
 
 ## Dev deployment
