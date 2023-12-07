@@ -1,4 +1,3 @@
-import Err from '@openaddresses/batch-error';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import Err from '@openaddresses/batch-error';
@@ -30,7 +29,7 @@ export default async function router(schema: any) {
     }, async (req: Request, res: Response) => {
         try {
             return res.json({
-                token: jwt.sign({ id: req.body.id }, SECRET, {
+                token: jwt.sign({ id: req.body.id }, process.env.SECRET, {
                     algorithm: 'HS256',
                     expiresIn: '1h'
                 }),
@@ -76,7 +75,7 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
-            jwt.verify(req.body.token, SECRET);
+            jwt.verify(req.body.token, process.env.SECRET);
 
             return res.json({
                 message: 'message-123'
