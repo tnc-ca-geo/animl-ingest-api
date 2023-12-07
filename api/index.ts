@@ -18,6 +18,8 @@ const schema = new Schema(express.Router(), { openapi: false });
 app.use('/api', schema.router);
 
 await schema.load(new URL('./routes/', import.meta.url), {}, { silent: true });
+schema.not_found();
+schema.error();
 
 const handler = serverless(app);
 
