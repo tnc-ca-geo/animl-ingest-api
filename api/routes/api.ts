@@ -1,5 +1,7 @@
 import Err from '@openaddresses/batch-error';
 import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import Err from '@openaddresses/batch-error';
 
 export default async function router(schema: any) {
     await schema.post('/login', {
@@ -28,8 +30,11 @@ export default async function router(schema: any) {
     }, async (req: Request, res: Response) => {
         try {
             return res.json({
-                token: '123',
-                message: 'message-123'
+                token: jwt.sign({ id: req.body.id }, SECRET, {
+                    algorithm: 'HS256',
+                    expiresIn: '1h'
+                }),
+                message: 'Token Generated'
             });
         } catch (err) {
             return Err.respond(err, res);
@@ -44,7 +49,7 @@ export default async function router(schema: any) {
         body: {
             type: 'object',
             additionalProperties: false,
-            required: ['id', 'token'],
+            required: ['token', 'image'],
             properties: {
                 token: { type: "string" },
                 camera_serial_number: { type: "string" },
@@ -71,6 +76,8 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
+            jwt.verify(req.body.token, SECRET);
+
             return res.json({
                 message: 'message-123'
             })
