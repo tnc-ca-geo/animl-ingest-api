@@ -10,7 +10,7 @@ provider:
 
   ecr:
     images:
-      api:
+      ingest-api:
         path: ./api/
   iam:
     role:
@@ -32,6 +32,7 @@ provider:
 
   environment:
     STAGE: ${opt:stage, self:provider.stage, 'dev'}
+    BUCKET: animl-images-ingestion-${opt:stage, self:provider.stage, 'dev'}
 
 
 functions:

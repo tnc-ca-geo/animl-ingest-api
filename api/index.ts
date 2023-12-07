@@ -10,6 +10,10 @@ app.use(morgan('combined'));
 app.use(bodyParser.json());
 
 app.post('/login', async (req: Request, res: Response) => {
+});
+
+app.post('/images', async (req: Request, res: Response) => {
+    console.error(req.body)
 
 });
 
