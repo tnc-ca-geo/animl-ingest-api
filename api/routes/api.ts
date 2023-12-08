@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import Err from '@openaddresses/batch-error';
+import S3 from '@aws-sdk/client-s3';
 
 export default async function router(schema: any) {
+    const s3 = new S3.S3Client({ region: process.env.AWS_REGION });
+
     await schema.post('/login', {
         name: 'Get Login',
         group: 'ImageForward',
@@ -29,10 +32,7 @@ export default async function router(schema: any) {
     }, async (req: Request, res: Response) => {
         try {
             return res.json({
-                token: jwt.sign({ id: req.body.id }, process.env.SECRET, {
-                    algorithm: 'HS256',
-                    expiresIn: '1h'
-                }),
+                token: jwt.sign({ id: req.body.id }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '1h' }),
                 message: 'Token Generated'
             });
         } catch (err) {
@@ -48,7 +48,7 @@ export default async function router(schema: any) {
         body: {
             type: 'object',
             additionalProperties: false,
-            required: ['token', 'image'],
+            required: ['token', 'image', 'metadata'],
             properties: {
                 token: { type: "string" },
                 camera_serial_number: { type: "string" },
@@ -77,9 +77,15 @@ export default async function router(schema: any) {
         try {
             jwt.verify(req.body.token, process.env.SECRET);
 
-            return res.json({
-                message: 'message-123'
-            })
+            const img = Buffer.from(req.body.image, 'base64');
+
+            await s3.send(new S3.PutObjectCommand({
+                Bucket: process.env.BUCKET,
+                Key: req.body.metadata.file_name,
+                Body: img
+            }));
+
+            return res.json({ message: 'Image Posted' })
         } catch (err) {
             return Err.respond(err, res);
         }
