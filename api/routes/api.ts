@@ -31,10 +31,11 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
-
+            if (!process.env.LOGIN_ID || !process.env.LOGIN_TOKEN) throw new Err(500, null, 'ID & Token haven\'t been configured on this API')
+            if (req.body.id !== process.env.LOGIN_ID || req.body.token !== process.env.LOGIN_TOKEN) throw new Err(401, null, 'Unauthorized');
 
             return res.json({
-                token: jwt.sign({ id: req.body.id }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '1h' }),
+                token: jwt.sign({ id: req.body.id }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '7d' }),
                 message: 'Token Generated'
             });
         } catch (err) {
@@ -78,7 +79,11 @@ export default async function router(schema: any) {
     }, async (req: Request, res: Response) => {
         try {
             jwt.verify(req.body.token, process.env.SECRET);
+        } catch (err) {
+            return Err.respond(new Err(401, err, 'Unauthorized'), res);
+        }
 
+        try {
             const img = Buffer.from(req.body.image, 'base64');
 
             await s3.send(new S3.PutObjectCommand({
