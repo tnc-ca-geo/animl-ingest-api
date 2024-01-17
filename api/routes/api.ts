@@ -31,6 +31,8 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
+
+
             return res.json({
                 token: jwt.sign({ id: req.body.id }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '1h' }),
                 message: 'Token Generated'

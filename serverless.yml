@@ -35,6 +35,8 @@ provider:
     STAGE: ${opt:stage, self:provider.stage, 'dev'}
     BUCKET: animl-images-ingestion-${opt:stage, self:provider.stage, 'dev'}
     SECRET: ${ssm:/images/ingestion-api-${self:provider.stage}}
+    LOGIN_ID: "{{resolve:secretsmanager:ingest-api-key-${opt:stage, self:provider.stage, 'dev'}:SecretString:id:AWSCURRENT}}"
+    LOGIN_TOKEN: "{{resolve:secretsmanager:ingest-api-key-${opt:stage, self:provider.stage, 'dev'}:SecretString:token:AWSCURRENT}}"
 
 functions:
   IngestAPI:
@@ -44,3 +46,15 @@ functions:
     timeout: 15
     events:
       - httpApi: '*'
+
+resources:
+  Resources:
+    apiKey:
+      Type: AWS::SecretsManager::Secret
+      Properties:
+        Description: API Key that will allow access for the APIs
+        GenerateSecretString:
+            GenerateStringKey: token
+            SecretStringTemplate: '{"id": "animl"}'
+        Name: ingest-api-key-${opt:stage, self:provider.stage, 'dev'}
+
