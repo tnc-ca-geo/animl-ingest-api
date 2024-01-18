@@ -14,10 +14,11 @@ export default async function router(schema: any) {
         body: {
             type: 'object',
             additionalProperties: false,
-            required: ['Id', 'Token'],
             properties: {
                 Id: { type: 'string' },
-                Token: { type: 'string' }
+                Token: { type: 'string' },
+                id: { type: 'string' },
+                token: { type: 'string' }
             }
         },
         res: {
@@ -32,10 +33,10 @@ export default async function router(schema: any) {
     }, async (req: Request, res: Response) => {
         try {
             if (!process.env.LOGIN_ID || !process.env.LOGIN_TOKEN) throw new Err(500, null, 'ID & Token haven\'t been configured on this API')
-            if (req.body.Id !== process.env.LOGIN_ID || req.body.Token !== process.env.LOGIN_TOKEN) throw new Err(401, null, 'Unauthorized');
+            if ((req.body.Id || req.body.id) !== process.env.LOGIN_ID || (req.body.Token || req.body.token) !== process.env.LOGIN_TOKEN) throw new Err(401, null, 'Unauthorized');
 
             return res.json({
-                token: jwt.sign({ id: req.body.id }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '7d' }),
+                token: jwt.sign({ id: (req.body.Id || req.body.id) }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '7d' }),
                 message: 'Token Generated'
             });
         } catch (err) {

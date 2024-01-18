@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import serverless from 'serverless-http';
 // @ts-ignore
 import Schema from '@openaddresses/batch-schema';
