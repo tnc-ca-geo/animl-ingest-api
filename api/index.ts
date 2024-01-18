@@ -1,7 +1,5 @@
-import bodyParser from 'body-parser';
 import express, { Request, Response } from 'express';
 import serverless from 'serverless-http';
-import morgan from 'morgan';
 // @ts-ignore
 import Schema from '@openaddresses/batch-schema';
 
@@ -9,16 +7,10 @@ const app = express();
 
 app.disable('x-powered-by');
 
-app.use((req: Request, res: Response, next) => {
-  console.log(req)
-  console.log(req.body.toString());
-  next()
-})
-
-app.use(morgan('combined'));
-app.use(bodyParser.json());
-
-const schema = new Schema(express.Router(), { openapi: false });
+const schema = new Schema(express.Router(), {
+    limit: 100,
+    openapi: false
+});
 
 app.use('/api', schema.router);
 
