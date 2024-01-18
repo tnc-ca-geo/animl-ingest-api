@@ -78,17 +78,17 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
-            jwt.verify(req.body.token, process.env.SECRET);
+            jwt.verify(req.body.Token, process.env.SECRET);
         } catch (err) {
             return Err.respond(new Err(401, err, 'Unauthorized'), res);
         }
 
         try {
-            const img = Buffer.from(req.body.image, 'base64');
+            const img = Buffer.from(req.body.Image, 'base64');
 
             await s3.send(new S3.PutObjectCommand({
                 Bucket: process.env.BUCKET,
-                Key: req.body.metadata.file_name,
+                Key: req.body.Metadata.File_name,
                 Body: img
             }));
 
