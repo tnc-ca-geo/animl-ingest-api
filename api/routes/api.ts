@@ -14,10 +14,10 @@ export default async function router(schema: any) {
         body: {
             type: 'object',
             additionalProperties: false,
-            required: ['id', 'token'],
+            required: ['Id', 'Token'],
             properties: {
-                id: { type: 'string' },
-                token: { type: 'string' }
+                Id: { type: 'string' },
+                Token: { type: 'string' }
             }
         },
         res: {
@@ -30,7 +30,6 @@ export default async function router(schema: any) {
             }
         }
     }, async (req: Request, res: Response) => {
-        console.error(req);
         try {
             if (!process.env.LOGIN_ID || !process.env.LOGIN_TOKEN) throw new Err(500, null, 'ID & Token haven\'t been configured on this API')
             if (req.body.id !== process.env.LOGIN_ID || req.body.token !== process.env.LOGIN_TOKEN) throw new Err(401, null, 'Unauthorized');
