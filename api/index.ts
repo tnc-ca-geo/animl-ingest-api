@@ -9,11 +9,13 @@ const app = express();
 
 app.disable('x-powered-by');
 
+/*
 app.use((req: Request, res: Response, next) => {
   console.log(req)
   console.log(req.body.toString());
   next()
 })
+*/
 
 app.use(morgan('combined'));
 app.use(bodyParser.json());

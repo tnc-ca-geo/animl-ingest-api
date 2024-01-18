@@ -53,16 +53,16 @@ export default async function router(schema: any) {
             additionalProperties: false,
             required: ['token', 'image', 'metadata'],
             properties: {
-                token: { type: "string" },
-                camera_serial_number: { type: "string" },
-                image: { type: "string" },
-                image_group: { type: "string" },
-                metadata: {
+                Token: { type: "string" },
+                Camera_serial_number: { type: "string" },
+                Image: { type: "string" },
+                Image_group: { type: "string" },
+                Metadata: {
                     type: 'object',
                     additionalProperties: false,
                     required: ['file_name', 'date_time_taken'],
                     properties: {
-                        file_name: { type: "string" },
+                        File_name: { type: "string" },
                         date_time_taken: { type: "string" }
                     }
                 }
