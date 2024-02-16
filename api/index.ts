@@ -7,6 +7,8 @@ const app = express();
 
 app.disable('x-powered-by');
 
+if (!process.env.SECRET) throw new Error('No SECRET env var defined');
+
 const schema = new Schema(express.Router(), {
     limit: 100,
     openapi: false
