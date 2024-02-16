@@ -4,7 +4,7 @@ import Err from '@openaddresses/batch-error';
 import S3 from '@aws-sdk/client-s3';
 
 export default async function router(schema: any) {
-    const s3 = new S3.S3Client({ region: process.env.AWS_REGION });
+    const s3 = new S3.S3Client({ region: process.env.AWS_REGION || 'us-west-2' });
 
     await schema.post('/login', {
         name: 'Get Login',
@@ -36,7 +36,7 @@ export default async function router(schema: any) {
             if ((req.body.Id || req.body.id) !== process.env.LOGIN_ID || (req.body.Token || req.body.token) !== process.env.LOGIN_TOKEN) throw new Err(401, null, 'Unauthorized');
 
             return res.json({
-                token: jwt.sign({ id: (req.body.Id || req.body.id) }, process.env.SECRET, { algorithm: 'HS256', expiresIn: '7d' }),
+                token: jwt.sign({ id: (req.body.Id || req.body.id) }, String(process.env.SECRET), { algorithm: 'HS256', expiresIn: '7d' }),
                 message: 'Token Generated'
             });
         } catch (err) {
@@ -79,9 +79,9 @@ export default async function router(schema: any) {
         }
     }, async (req: Request, res: Response) => {
         try {
-            jwt.verify(req.body.Token, process.env.SECRET);
+            jwt.verify(req.body.Token, String(process.env.SECRET));
         } catch (err) {
-            return Err.respond(new Err(401, err, 'Unauthorized'), res);
+            return Err.respond(new Err(401, err instanceof Error ? err : new Error(String(err)), 'Unauthorized'), res);
         }
 
         try {
