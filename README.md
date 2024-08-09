@@ -1,6 +1,6 @@
 <h1 align=center>Animl Ingest API</h1>
 
-Lambda-based API to support consuming cellular camera data via POST requests. Currently, the API only support image payloads sent by Reconyx's servers.
+Lambda-based API to support consuming cellular camera data via POST requests. Currently, the API only supports image payloads sent by Reconyx's servers.
 
 ## About
 
