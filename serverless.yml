@@ -12,6 +12,7 @@ provider:
     images:
       ingest-api:
         path: ./api/
+        platform: linux/amd64
   iam:
     role:
       managedPolicies:
